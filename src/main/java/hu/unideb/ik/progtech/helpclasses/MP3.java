@@ -56,7 +56,7 @@ public class MP3 {
         if (artists == null)
             return true;
 
-        return artists.stream()
+        return !artists.stream()
                 .map(a -> validArtist(a))
                 .anyMatch(bool -> !bool);
     }
@@ -133,39 +133,70 @@ public class MP3 {
         return length;
     }
 
-    public void setTitle(String title) {
+    public MP3 setTitle(String title) {
         if (!validTitle(title))
             throw new IllegalArgumentException("invalid title");
         this.title = title;
+        return this;
     }
 
-    public void setArtists(Set<String> artists) {
+    public MP3 setArtists(Set<String> artists) {
         if (!validartists(artists))
             throw new IllegalArgumentException("invalid artists");
         this.artists = artists;
+        return this;
     }
 
-    public void setAlbumTitle(String albumTitle) {
+    public MP3 setAlbumTitle(String albumTitle) {
         if (!validAlbumTitle(albumTitle))
             throw new IllegalArgumentException("invalid album title");
         this.albumTitle = albumTitle;
+        return this;
     }
 
-    public void setSerialNumber(Integer serialNumber) {
+    public MP3 setSerialNumber(Integer serialNumber) {
         if (!validSerialNumber(serialNumber))
             throw new IllegalArgumentException("invalid serial number");
         this.serialNumber = serialNumber;
+        return this;
     }
 
-    public void setLength(String length) {
+    public MP3 setLength(String length) {
         if (!validLength(length))
             throw new IllegalArgumentException("invalid length");
         this.length = length;
+        return this;
     }
 
-    public void setRating(Integer rating) {
+    public MP3 setRating(Integer rating) {
         if (!validRating(rating))
             throw new IllegalArgumentException("invalid rating");
         this.rating = rating;
+        return this;
     }
+    
+    @Override
+    public String toString() {
+        String lnSep = System.getProperty("line.separator");
+        StringBuilder sb = new StringBuilder();
+        sb.append("----- MP3 -----").append(lnSep);
+        if (hasTitle())
+            sb.append("Title: ").append(title).append(lnSep);
+        if (hasAlbumTitle())
+            sb.append("Album title: ").append(albumTitle).append(lnSep);
+        sb.append("Length: ").append(length).append(lnSep);
+        if (hasAtists()) {
+            sb.append("Artists: ");
+            for (String artist : artists)
+                sb.append(artist).append(" ");
+            sb.append(lnSep);
+        }
+        if (hasSerialNumber())
+            sb.append("Number: ").append(serialNumber).append(lnSep);
+        if (hasRating())
+            sb.append("Rating: ").append(rating).append(" stars");
+
+        return sb.toString();
+    }
+    
 }//class
