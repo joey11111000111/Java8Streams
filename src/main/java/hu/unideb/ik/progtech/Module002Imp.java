@@ -2,7 +2,10 @@ package hu.unideb.ik.progtech;
 
 import hu.unideb.ik.progtech.helpclasses.MP3;
 
+import java.time.Duration;
 import java.util.*;
+import java.util.function.BiFunction;
+import java.util.function.BinaryOperator;
 import java.util.stream.Collectors;
 
 /**
@@ -56,4 +59,91 @@ public class Module002Imp {
         return result;
     }
 
-}
+    public String largestAlbum(MP3[] songs) {
+        if (songs.length == 0)
+            return null;
+
+        return Arrays.stream(songs)
+                .filter(MP3::hasAlbumTitle)
+                .map(MP3::getAlbumTitle)
+                .collect(Collectors.groupingBy(e -> e))
+                .entrySet().stream()
+                .map(e -> e.getKey() + ':' + e.getValue().size())
+                .sorted((s1, s2) -> {
+                    int s1Size = Integer.parseInt(s1.split(":")[1]);
+                    int s2Size = Integer.parseInt(s2.split(":")[1]);
+                    return s2Size - s1Size;
+                })
+                .findFirst()
+                .get()
+                .split(":")[0];
+    }
+
+    public Duration lengthOfLongestAlbum(MP3[] songs) {
+        // Akinek van kevésbé maszek megoldása, az legyen szíves elküldeni...
+        return Arrays.stream(songs)
+                .filter(MP3::hasAlbumTitle)
+                .collect(Collectors.groupingBy(MP3::getAlbumTitle))
+                .entrySet().stream()
+                .map(e -> {
+                    String midResult = e.getKey();
+                    Integer fullAlbumLength = e.getValue().stream()
+                            .map(MP3::getLength)
+                            .mapToInt(s -> {
+                                String[] parts = s.split(":");
+                                int length = Integer.parseInt(parts[2]);
+                                length += 60 * Integer.parseInt(parts[1]);
+                                length += 60 * 60 * Integer.parseInt(parts[0]);
+                                return length;
+                            })
+                            .sum();
+                    midResult += ':' + fullAlbumLength.toString();
+                    return midResult;
+                })
+                .sorted((s1, s2) -> {
+                    int s1Length = Integer.parseInt(s1.split(":")[1]);
+                    int s2Length = Integer.parseInt(s2.split(":")[1]);
+                    return s2Length - s1Length;
+                })
+                .limit(1)
+                .map(s -> {
+                    int length = Integer.parseInt(s.split(":")[1]);
+                    return Duration.ofSeconds(length);
+                })
+                .findFirst()
+                .get();
+    }
+
+    public Map<String, Integer> worksOfArtists(MP3[] songs) {
+        Map<String, Integer> identity = new HashMap<>();
+        BiFunction<Map<String, Integer>, Set<String>, Map<String, Integer>> accumulator = (map, set) -> {
+            set.stream().forEach(artist -> {
+                if (map.containsKey(artist))
+                    map.put(artist, map.get(artist) + 1);
+                else
+                    map.put(artist, 1);
+            });
+            return map;
+        };
+        BinaryOperator<Map<String, Integer>> combiner = (mapLeft, mapRight) -> {
+            Set<String> allKeys = mapLeft.keySet();
+            allKeys.addAll(mapRight.keySet());
+            allKeys.stream().forEach(key -> {
+                if (mapLeft.containsKey(key)) {
+                    if (mapRight.containsKey(key))
+                        mapLeft.put(key, mapLeft.get(key) + mapRight.get(key));
+                }
+                else
+                    mapLeft.put(key, mapRight.get(key));
+
+            });
+            return mapLeft;
+        };
+
+        return Arrays.stream(songs)
+                .filter(MP3::hasArtists)
+                .map(MP3::getArtists)
+                .reduce(identity, accumulator, combiner);
+    }
+
+}//class

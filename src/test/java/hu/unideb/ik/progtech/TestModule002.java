@@ -6,6 +6,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
+import java.time.Duration;
 import java.util.*;
 
 /**
@@ -39,7 +40,7 @@ public class TestModule002 {
                 .setTitle("Stringer").setAlbumTitle("Direction").setRating(1).setSerialNumber(12);
         allTestMP3s[5] = new MP3("0:9:25")
                 .setAlbumTitle("Zerena").setRating(2).setSerialNumber(4)
-                .setArtists(new HashSet<>(Arrays.asList("Zelda", "Uktar")));
+                .setArtists(new HashSet<>(Arrays.asList("Zelda", "Uktar", "John")));
         allTestMP3s[6] = new MP3("2:0:6")
                 .setAlbumTitle("Zerena").setRating(4).setSerialNumber(1).setTitle("Piano chill");
         allTestMP3s[7] = new MP3("0:2:20").setRating(5);
@@ -158,5 +159,72 @@ public class TestModule002 {
     }
 
 
+    /*
+    A függvény adja vissza annak az albumnak a nevét, amelyik a legtöbb zeneszámot tartalmazza.
+     */
+    @Test
+    public void largestAlbumTest() {
+        // Generate expected result
+        Map<String, Integer> midResult = new HashMap<>();
+        for (MP3 mp3 : allTestMP3s) {
+            if (!mp3.hasAlbumTitle())
+                continue;
+            String albumTitle = mp3.getAlbumTitle();
+            if (midResult.containsKey(albumTitle))
+                midResult.put(albumTitle, midResult.get(albumTitle) + 1);
+            else
+                midResult.put(albumTitle, 1);
+        }
 
-}
+        String expected = null;
+        Integer max = -1;
+        for (Map.Entry<String, Integer> entry : midResult.entrySet()) {
+            Integer count = entry.getValue();
+            if (count > max) {
+                max = count;
+                expected = entry.getKey();
+            }
+        }
+
+        String result = moduleImp.largestAlbum(allTestMP3s);
+        assertEquals(expected, result);
+    }
+
+    /*
+    Milyen hosszú a leghosszabb album? A függvény egy Duration objektumot adjon vissza
+     */
+    @Test
+    public void lengthOfLongestAlbum() {
+        int allSeconds = 12 * 60 * 60;
+        Duration expected = Duration.ofSeconds(allSeconds);
+        Duration result = moduleImp.lengthOfLongestAlbum(allTestMP3s);
+        assertEquals(expected, result);
+    }
+
+    /*
+    Az egyes előadók hány dalban vették ki a részüket? Az eredmény egy Map<String, Integer>
+    legyen.
+     */
+    @Test
+    public void worksOfArtistsTest() {
+        Map<String, Integer> expected = new HashMap<>();
+        for (MP3 mp3 : allTestMP3s) {
+            if (!mp3.hasArtists())
+                continue;
+
+            for (String artist : mp3.getArtists()) {
+                if (expected.containsKey(artist))
+                    expected.put(artist, expected.get(artist) + 1);
+                else
+                    expected.put(artist, 1);
+            }
+        }
+
+        for (Map.Entry<String, Integer> entry : expected.entrySet())
+            System.out.println(entry.getKey() + ": " + entry.getValue());
+
+        Map<String, Integer> result = moduleImp.worksOfArtists(allTestMP3s);
+        assertEquals(expected, result);
+    }
+
+}//class

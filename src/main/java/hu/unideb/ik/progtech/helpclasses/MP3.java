@@ -101,7 +101,7 @@ public class MP3 {
         return title;
     }
 
-    public boolean hasAtists() {
+    public boolean hasArtists() {
         return artists.size() > 0;
     }
     public Set<String> getArtists() {
@@ -185,7 +185,7 @@ public class MP3 {
         if (hasAlbumTitle())
             sb.append("Album title: ").append(albumTitle).append(lnSep);
         sb.append("Length: ").append(length).append(lnSep);
-        if (hasAtists()) {
+        if (hasArtists()) {
             sb.append("Artists: ");
             for (String artist : artists)
                 sb.append(artist).append(" ");

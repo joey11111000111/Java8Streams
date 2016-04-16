@@ -76,7 +76,6 @@ public class Module001Imp {
                             maxSize = innerSetSize;
                     }
 
-                    System.out.println("maxSize = " + maxSize);
                     return maxSize;
                 }).max().getAsInt();
     }
