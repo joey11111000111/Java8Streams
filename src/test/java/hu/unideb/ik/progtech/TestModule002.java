@@ -14,12 +14,12 @@ import java.util.*;
  */
 public class TestModule002 {
 
-    static Module002Imp moduleImp;
+    static Module002Impl moduleImpl;
     MP3[] allTestMP3s;
 
     @BeforeClass
     public static void setUp() {
-        moduleImp = new Module002Imp();
+        moduleImpl = new Module002Impl();
     }
 
     @Before
@@ -84,7 +84,7 @@ public class TestModule002 {
         }
         int expected = max;     // rename
 
-        int result = moduleImp.durationOfLongestSong(allTestMP3s);
+        int result = moduleImpl.durationOfLongestSong(allTestMP3s);
         assertEquals(expected, result);
     }
 
@@ -108,15 +108,15 @@ public class TestModule002 {
             }
         }
 
-        Map<Boolean, List<MP3>> result = moduleImp.bestAndWorstSongs(allTestMP3s);
+        Map<Boolean, List<MP3>> result = moduleImpl.bestAndWorstSongs(allTestMP3s);
         assertEquals(expected, result);
     }
 
     /*
     Rendezd albumokba a zeneszámokat (Csak azokat, amelyeknél az album meg van adva)!
     (Az eredmény Map<string[album címe], List<MP3>> legyen)!
-    A zeneszámok sorszám szerint növekvőbe legyenek rendezve, a lista végén legyenek azok, amiknek nincs sorszámuk!
-    A sorszámmal nem rendelkező zeneszámok a lista végén egymás között hossz szerint csökkenő sorrendben
+    A zeneszámok értékelés szerint növekvőbe legyenek rendezve, a lista végén legyenek azok, amiknek nincs értékelésük!
+    Az értékeléssel nem rendelkező zeneszámok a lista végén egymás között hossz szerint csökkenő sorrendben
     legyenek rendezve.
      */
     @Test
@@ -154,7 +154,7 @@ public class TestModule002 {
             entry.getValue().sort(ratingSort);
 
         // test result
-        Map<String, List<MP3>> result = moduleImp.mapByAlbum(allTestMP3s);
+        Map<String, List<MP3>> result = moduleImpl.mapByAlbum(allTestMP3s);
         assertEquals(expected, result);
     }
 
@@ -186,7 +186,7 @@ public class TestModule002 {
             }
         }
 
-        String result = moduleImp.largestAlbum(allTestMP3s);
+        String result = moduleImpl.largestAlbum(allTestMP3s);
         assertEquals(expected, result);
     }
 
@@ -197,7 +197,7 @@ public class TestModule002 {
     public void lengthOfLongestAlbum() {
         int allSeconds = 12 * 60 * 60;
         Duration expected = Duration.ofSeconds(allSeconds);
-        Duration result = moduleImp.lengthOfLongestAlbum(allTestMP3s);
+        Duration result = moduleImpl.lengthOfLongestAlbum(allTestMP3s);
         assertEquals(expected, result);
     }
 
@@ -220,10 +220,8 @@ public class TestModule002 {
             }
         }
 
-        for (Map.Entry<String, Integer> entry : expected.entrySet())
-            System.out.println(entry.getKey() + ": " + entry.getValue());
 
-        Map<String, Integer> result = moduleImp.worksOfArtists(allTestMP3s);
+        Map<String, Integer> result = moduleImpl.worksOfArtists(allTestMP3s);
         assertEquals(expected, result);
     }
 

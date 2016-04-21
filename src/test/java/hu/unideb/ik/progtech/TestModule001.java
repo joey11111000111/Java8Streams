@@ -13,11 +13,11 @@ import static org.junit.Assert.*;
 
 public class TestModule001 {
 
-    static Module001Imp moduleImp;
+    static Module001Impl moduleImpl;
 
     @BeforeClass
     public static void setUp() {
-        moduleImp = new Module001Imp();
+        moduleImpl = new Module001Impl();
     }
 
     /*
@@ -34,7 +34,7 @@ public class TestModule001 {
         expected.put("c", 3);
         expected.put("k", 4);
         expected.put("d", 1);
-        Map<String, Integer> result = moduleImp.countListContent(list);
+        Map<String, Integer> result = moduleImpl.countListContent(list);
         assertEquals(expected, result);
     }
 
@@ -47,8 +47,21 @@ public class TestModule001 {
     public void mostAppearanceTest() {
         List<String> list = Arrays.asList("a", "a", "b", "c", "a", "b", "a", "c", "c", "a", "c", "c", "c");
         Integer expected = 6;
-        Integer result = moduleImp.mostAppearance(list);
+        Integer result = moduleImpl.mostAppearance(list);
         assertEquals(expected, result);
+    }
+
+    /*
+    Adott az előző feladatban megadott String lista. A függvényhívás eredménye adja vissza azt
+    a String -et, amelyik a legtöbbször fordul elő a listában.
+     */
+    @Test
+    public void mostCommonElementTest() {
+        List<String> list = Arrays.asList("a", "a", "b", "c", "a", "b", "a", "c", "c", "a", "c", "c", "c");
+        String expected = "c";
+        String result = moduleImpl.mostCommonElement(list);
+        assertEquals(expected, result);
+
     }
 
     /*
@@ -72,7 +85,7 @@ public class TestModule001 {
             allPersons.add(person);
         }
 
-        Set<Person> result = moduleImp.overwhelmedPersons(allPersons);
+        Set<Person> result = moduleImpl.overwhelmedPersons(allPersons);
         result.stream()
             .forEach(p -> assertEquals(5, p.getToDoMap().size()));
     }//overwhelmedPersonTest
@@ -89,7 +102,7 @@ public class TestModule001 {
     @Test
     public void mostPopulatedStatusTest() {
         Map<String, Map<String, Set<Person>>> employeesAtCompanies = createEmployeeMap();
-        Integer result = moduleImp.mostPopulatedStatus(employeesAtCompanies);
+        Integer result = moduleImpl.mostPopulatedStatus(employeesAtCompanies);
         assertEquals(new Integer(19), result);
     }
 
@@ -106,14 +119,13 @@ public class TestModule001 {
         Set<Person> firenteEmployees = new HashSet<>();
         for (Map.Entry<String, Set<Person>> entry : innerMap.entrySet())
             firenteEmployees.addAll(entry.getValue());
-        List<String> expected = new ArrayList<>();
+        Set<String> expected = new HashSet<>();
         LocalDate boundary = LocalDate.of(1955, 1, 1);
         for (Person p : firenteEmployees)
             if (p.getBirthday().isBefore(boundary))
                 expected.add(p.getFirstName() + ' ' + p.getLastName());
-        Collections.sort(expected);
 
-        List<String> result = moduleImp.oldEmployeesOfCompany(employeesAtCompanies, "Firente", boundary);
+        Set<String> result = moduleImpl.oldEmployeesOfCompany(employeesAtCompanies, "Firente", boundary);
         assertEquals(expected, result);
     }
 
@@ -164,7 +176,7 @@ public class TestModule001 {
             }//for
         }//for
 
-        Map<Boolean, List<Person>> result = moduleImp.booleanMap(stackList, lowerBound, upperBound);
+        Map<Boolean, List<Person>> result = moduleImpl.booleanMap(stackList, lowerBound, upperBound);
         assertEquals(expected, result);
     }
 

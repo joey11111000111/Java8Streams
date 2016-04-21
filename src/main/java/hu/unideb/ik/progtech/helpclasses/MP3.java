@@ -18,31 +18,12 @@ public class MP3 {
 
     public MP3(String title, Set<String> artists, String albumTitle, Integer serialNumber,
                String length, Integer rating) {
-/*        if (!validTitle(title))
-            throw new IllegalArgumentException("invalid title");
-        if (!validartists(artists))
-            throw new IllegalArgumentException("invalid artists");
-        if (!validAlbumTitle(albumTitle))
-            throw new IllegalArgumentException("invalid album title");
-        if (!validSerialNumber(serialNumber))
-            throw new IllegalArgumentException("invalid serial number");
-        if (!validLength(length))
-            throw new IllegalArgumentException("invalid length");
-        if (!validRating(rating))
-            throw new IllegalArgumentException("invalid rating");*/
         setTitle(title);
         setArtists(artists);
         setAlbumTitle(albumTitle);
         setSerialNumber(serialNumber);
         setLength(length);
         setRating(rating);
-
-/*        this.title = title;
-        this.artists = artists;
-        this.albumTitle = albumTitle;
-        this.serialNumber = serialNumber;
-        this.length = length;
-        this.rating = rating;*/
     }
 
     public MP3(String length) {
